@@ -1,0 +1,10 @@
+Skapa ett nytt repository på GitHub
+Lägg till användaren maxygdell i GitHub-repositoryt
+Lägg till en README.md-fil
+Skapa en .gitignore-fil (för target/, .idea/ osv.)
+Skapa Maven-projektstrukturen
+Lägg till nödvändiga beroenden i pom.xml:
+Dependency för JUnit
+Dependency för Mockito
+Dependency och build-inställningar för JaCoCo
+Skapa en TDD-dagbok.md-fil

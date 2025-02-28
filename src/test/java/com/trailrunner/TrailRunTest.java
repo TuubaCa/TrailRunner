@@ -19,8 +19,7 @@ public class TrailRunTest {
     private final double distance = 15.0;
     private final int durationInSeconds = 5400; // 1 hour and 30 minutes
     private Date date;
-    private final String expectedFormattedDuration = "1:30:00";
-
+  
     @BeforeEach
     public void setup() {
         date = createDate(2024, 12, 25);

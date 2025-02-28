@@ -17,6 +17,3 @@ Dag 3 - RunManager
 
 Dag 4 - Avancerade funktioner
  Implementera metod för att ta bort löprundor
- Lägg till valideringar och felhantering
-
-

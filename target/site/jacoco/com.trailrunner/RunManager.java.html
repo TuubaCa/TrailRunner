@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RunManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">trailrunner</a> &gt; <a href="index.source.html" class="el_package">com.trailrunner</a> &gt; <span class="el_source">RunManager.java</span></div><h1>RunManager.java</h1><pre class="source lang-java linenums">package com.trailrunner;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+<span class="fc" id="L11">public class RunManager {</span>
+
+<span class="fc" id="L13">    private final List&lt;TrailRun&gt; runList = new ArrayList&lt;&gt;();</span>
+
+    public void addNewTrailRun(TrailRun run) {
+<span class="fc" id="L16">        runList.add(run);</span>
+<span class="fc" id="L17">    }</span>
+
+    public TrailRun getTrailRun(String id) {
+<span class="nc" id="L20">        return runList.stream()</span>
+<span class="nc" id="L21">                .filter(run -&gt; run.getRunIdentifier().equals(id))</span>
+<span class="nc" id="L22">                .findFirst()</span>
+<span class="nc" id="L23">                .orElse(null);</span>
+    }
+
+    public void deleteTrailRun(String id) {
+<span class="nc" id="L27">        runList.removeIf(run -&gt; run.getRunIdentifier().equals(id));</span>
+<span class="nc" id="L28">    }</span>
+
+    public boolean isRunListEmpty() {
+<span class="fc" id="L31">        return runList.isEmpty();</span>
+    }
+
+    public int daysSinceLastRun() {
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (isRunListEmpty()) {</span>
+<span class="fc" id="L36">            return 0;</span>
+        }
+
+<span class="fc" id="L39">        Date today = new Date();</span>
+<span class="fc" id="L40">        return runList.stream()</span>
+<span class="fc" id="L41">                .mapToInt(run -&gt; calculateDaysBetween(run.getDate(), today))</span>
+<span class="fc" id="L42">                .min()</span>
+<span class="fc" id="L43">                .orElse(0);</span>
+    }
+
+    public TrailRun getLatestRun() {
+<span class="pc bpc" id="L47" title="1 of 2 branches missed.">        if (isRunListEmpty()) {</span>
+<span class="nc" id="L48">            return null;</span>
+        }
+
+<span class="fc" id="L51">        return runList.stream()</span>
+<span class="fc" id="L52">                .max(Comparator.comparing(TrailRun::getDate))</span>
+<span class="fc" id="L53">                .orElse(null);</span>
+    }
+
+    public double getTotalDistance() {
+<span class="fc" id="L57">        return runList.stream()</span>
+<span class="fc" id="L58">                .mapToDouble(TrailRun::getDistance)</span>
+<span class="fc" id="L59">                .sum();</span>
+    }
+
+    public double getAverageDistance() {
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (isRunListEmpty()) {</span>
+<span class="nc" id="L64">            return 0.0;</span>
+        }
+<span class="fc" id="L66">        return getTotalDistance() / getNumberOfRuns();</span>
+    }
+
+    public int getNumberOfRuns() {
+<span class="fc" id="L70">        return runList.size();</span>
+    }
+
+    public Set&lt;String&gt; getSetOfIds() {
+<span class="nc" id="L74">        return runList.stream()</span>
+<span class="nc" id="L75">                .map(TrailRun::getRunIdentifier)</span>
+<span class="nc" id="L76">                .collect(Collectors.toSet());</span>
+    }
+
+    private int calculateDaysBetween(Date start, Date end) {
+<span class="fc" id="L80">        long diffInMillies = Math.abs(end.getTime() - start.getTime());</span>
+<span class="fc" id="L81">        return (int) TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

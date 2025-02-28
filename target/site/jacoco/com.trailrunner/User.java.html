@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>User.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">trailrunner</a> &gt; <a href="index.source.html" class="el_package">com.trailrunner</a> &gt; <span class="el_source">User.java</span></div><h1>User.java</h1><pre class="source lang-java linenums">package com.trailrunner;
+
+import java.text.DecimalFormat;
+
+
+public class User {
+
+    private float height; // Längd i cm
+    private float weight; // Vikt i kg
+    private int age; // Ålder
+
+    private final RunManager runManager; // Hanterar löpsessioner
+    private double fitnessScore; // Fitnesspoäng
+
+   
+<span class="fc" id="L16">    public User(float height, float weight, int age) {</span>
+<span class="fc" id="L17">        this.height = height;</span>
+<span class="fc" id="L18">        this.weight = weight;</span>
+<span class="fc" id="L19">        this.age = age;</span>
+<span class="fc" id="L20">        this.fitnessScore = 0.0;</span>
+<span class="fc" id="L21">        this.runManager = new RunManager();</span>
+<span class="fc" id="L22">    }</span>
+
+    // Getter och Setter-metoder
+
+    public float getHeight() {
+<span class="fc" id="L27">        return height;</span>
+    }
+
+    public void setHeight(float height) {
+<span class="nc" id="L31">        this.height = height;</span>
+<span class="nc" id="L32">    }</span>
+
+    public float getWeight() {
+<span class="fc" id="L35">        return weight;</span>
+    }
+
+    public void setWeight(float weight) {
+<span class="nc" id="L39">        this.weight = weight;</span>
+<span class="nc" id="L40">    }</span>
+
+    public int getAge() {
+<span class="fc" id="L43">        return age;</span>
+    }
+
+    public void setAge(int age) {
+<span class="nc" id="L47">        this.age = age;</span>
+<span class="nc" id="L48">    }</span>
+
+    
+    public String calculateFitnessScore() {
+<span class="fc bfc" id="L52" title="All 2 branches covered.">        if (runManager.isRunListEmpty()) {</span>
+<span class="fc" id="L53">            return &quot;0.00&quot;;</span>
+        }
+
+<span class="fc" id="L56">        TrailRun latestRun = getLatestRun();</span>
+
+<span class="fc" id="L58">        double calculatedScore = (latestRun.getDistance() + (latestRun.getAverageSpeedPerHour() / latestRun.getMinutesPerKilometer())) - (daysSinceLastRun() / 2.0);</span>
+    
+<span class="pc bpc" id="L60" title="1 of 2 branches missed.">        if (fitnessScore == 0.0) {</span>
+<span class="fc" id="L61">            fitnessScore = Math.max(calculatedScore, 0.0); // Negatif olmaması için</span>
+        } else {
+<span class="nc" id="L63">            fitnessScore = Math.max(fitnessScore + calculatedScore, 0.0);</span>
+        }
+
+        //check its consistency
+        // if (fitnessScore == 0.0) {
+        //     fitnessScore = (latestRun.getDistance() + (latestRun.getAverageSpeedPerHour() / latestRun.getMinutesPerKilometer())) - (daysSinceLastRun() / 2.0);
+        // } else {
+        //     fitnessScore = Math.max(
+        //         fitnessScore + (latestRun.getDistance() + (latestRun.getAverageSpeedPerHour() / latestRun.getMinutesPerKilometer())) - (daysSinceLastRun() / 2.0),
+        //         0.0
+        //     );
+        // }
+
+<span class="fc" id="L76">        DecimalFormat decimalFormat = new DecimalFormat(&quot;#.00&quot;);</span>
+<span class="fc" id="L77">        return decimalFormat.format(fitnessScore);</span>
+    }
+
+    
+    public int getRunCount() {
+<span class="fc" id="L82">        return runManager.getNumberOfRuns();</span>
+    }
+
+    
+    public int daysSinceLastRun() {
+<span class="fc" id="L87">        return runManager.daysSinceLastRun();</span>
+    }
+
+    //userin son kosusunu dondurur
+    private TrailRun getLatestRun() {
+<span class="fc" id="L92">        return runManager.getLatestRun();</span>
+    }
+
+    
+    public void addNewRun(TrailRun newRun) {
+<span class="fc" id="L97">        runManager.addNewTrailRun(newRun);</span>
+<span class="fc" id="L98">    }</span>
+
+    
+    public double getTotalDistance() {
+<span class="fc" id="L102">        return runManager.getTotalDistance();</span>
+    }
+
+    
+    public double getAverageDistance() {
+<span class="fc" id="L107">        return runManager.getAverageDistance();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
